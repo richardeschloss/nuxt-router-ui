@@ -1,0 +1,5 @@
+.tree-container {
+  border: 1px solid;
+  font: 16px sans-serif;
+  user-select: none;
+}

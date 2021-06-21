@@ -1,0 +1,12 @@
+{
+  "all": false,
+  "reporter": ["html", "text"],
+  "exclude": ["node_modules"],
+  "include": [
+    "components/**/*.js", 
+    "lib/VueD3/*.js",
+    "lib/module.js",
+    "lib/plugin.js"
+  ],
+  "extension": [".js", ".vue"]
+}
