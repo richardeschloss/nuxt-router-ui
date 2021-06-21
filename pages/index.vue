@@ -1,11 +1,25 @@
 <template>
-  <div class="nuxt-container">
-    Main content here...    
-  </div>
+  <client-only>
+    <Markdown class="nuxt-container">
+      {{ readme }}
+    </Markdown>
+  </client-only>
 </template>
 
 <script>
-export default {}
+const readmeURL = 'https://raw.githubusercontent.com/richardeschloss/nuxt-router-ui/master/README.md'
+export default {
+  fetchOnServer: false,
+  async fetch () {
+    this.readme = await fetch(readmeURL)
+      .then(res => res.text())
+  },
+  data () {
+    return {
+      readme: ''
+    }
+  }
+}
 </script>
 
 <style>
@@ -15,6 +29,10 @@ export default {}
   display: flex;
   justify-content: center;
   align-items: center;
+  /* text-align: center; */
+}
+
+#nuxt-router-ui {
   text-align: center;
 }
 
