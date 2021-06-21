@@ -1,5 +1,22 @@
+import { promisify } from 'util'
+import Glob from 'glob'
+
+async function staticRoutes () {
+  const glob = promisify(Glob)
+  const files = await glob('./stories/**/*.{vue,js,md}')
+  const routes = files
+    .map(f => f
+      .replace('./', '/')
+      .replace(/(.js|.vue|.md)/, ''))
+
+  return routes
+}
+
 export default {
   telemetry: false,
+  target: process.env.NODE_ENV === 'production'
+    ? 'static'
+    : 'server',
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'nuxt-router-ui',
@@ -25,11 +42,23 @@ export default {
     'nuxt-stories'
   ],
 
+  stories: { forceBuild: true, staticHost: process.env.NODE_ENV === 'production' },
+
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
     '~/lib/module.js'
   ],
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {}
+  build: {
+    babel: {
+      compact: true
+    }
+  },
+
+  generate: {
+    routes () {
+      return staticRoutes()
+    }
+  }
 }
