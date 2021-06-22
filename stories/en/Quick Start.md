@@ -14,13 +14,13 @@ A dope AF router UI for Nuxt and VueJS.
 
 ## Easy-as-pie Usage
 
-1. Install it
+### Install it
 
 ```bash
 $ npm i -D nuxt-router-ui
 ```
 
-2. Add 'nuxt-router-ui' to your modules (Nuxt):
+### Nuxt Config (one-line)
 
 `nuxt.config.js`
 ```js
@@ -32,7 +32,19 @@ export default {
 
 ```
 
-3. Embed it. The component to embed is `<D3RouterUI />`. Find a part of your app that is pretty much fixed, like the footer:
+### Vue-only config
+
+`your-globals.js` 
+```js
+import Vue from 'vue'
+import D3RouterUI from 'nuxt-router-ui/lib/D3RouterUI.js"
+
+Vue.component('D3RouterUI', D3RouterUI)
+```
+
+### Embed it
+
+The component to embed is `<D3RouterUI />`. Find a part of your app that is pretty much fixed, like the footer:
 
 `layouts/default.vue`
 ```html
@@ -44,7 +56,8 @@ export default {
 </template>
 ```
 
-4. Use it.
+### Use it
+
 | Action | Result |
 | --- | --- |
 | Ctrl + Shift + Space | Opens Router UI |

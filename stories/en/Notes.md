@@ -12,9 +12,3 @@ To only use these or any components in dev mode, use `$nuxt.context.isDev`:
 <div v-if="$nuxt.context.isDev">
   <D3Tree :data="tree" />
 </div>
-
-# Tasks
-
-- [x] Update docs
-  - [ ] Include short animated GIF
-  - [x] Include shields
