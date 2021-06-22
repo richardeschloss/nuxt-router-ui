@@ -17,6 +17,7 @@ window.Date = global.Date = Date
 
 Vue.config.devtools = false
 Vue.config.productionTip = false
+Vue.config.silent = true
 
 const { serial: test, beforeEach, afterEach } = ava
 const D3Tree = Vue.extend(d3Tree)
@@ -152,6 +153,7 @@ test('Handle Click and Ctrl+Click (on node)', (t) => {
   ctx.$emit = (label, msg) => {
     _emitted[label] = msg
   }
+  ctx.clickOverride = 'ctrlKey'
   ctx.handleNodeClick(evt, d, update)
   t.is(callCnt, 1)
   t.truthy(d.children)
@@ -165,4 +167,22 @@ test('Handle Click and Ctrl+Click (on node)', (t) => {
   t.truthy(_emitted.nodeClick)
   t.truthy(_emitted.nodeClick.evt)
   t.truthy(_emitted.nodeClick.data)
+})
+
+test('NodeClick Override', (t) => {
+  const { clickOverride } = d3Tree.props
+  process.server = true
+  let r = clickOverride.default()
+  t.falsy(r)
+
+  process.server = false
+  global.navigator = {
+    platform: 'win'
+  }
+  r = clickOverride.default()
+  t.is(r, 'ctrlKey')
+
+  global.navigator.platform = 'mac'
+  r = clickOverride.default()
+  t.is(r, 'metaKey')
 })
