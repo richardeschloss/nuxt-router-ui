@@ -7,6 +7,7 @@ import d3RouterUI from '../lib/VueD3/D3RouterUI.js'
 window.Date = global.Date = Date
 Vue.config.devtools = false
 Vue.config.productionTip = false
+Vue.config.silent = true
 
 const { serial: test, beforeEach, afterEach } = ava
 const D3RouterUI = Vue.extend(d3RouterUI)
@@ -234,4 +235,40 @@ test('Handle Ok (Params modal)', (t) => {
   comp.nextPath = '/some/path/'
   comp.handleOk()
   t.is(comp.nextPath, '/some/path')
+})
+
+test('NodeClick Override', (t) => {
+  const { clickOverride } = d3RouterUI.props
+  process.server = true
+  let r = clickOverride.default()
+  t.falsy(r)
+
+  process.server = false
+  global.navigator = {
+    platform: 'win'
+  }
+  r = clickOverride.default()
+  t.is(r, 'ctrlKey')
+
+  global.navigator.platform = 'mac'
+  r = clickOverride.default()
+  t.is(r, 'metaKey')
+})
+
+test('Open Override', (t) => {
+  const { openOverride } = d3RouterUI.props
+  process.server = true
+  let r = openOverride.default()
+  t.falsy(r)
+
+  process.server = false
+  global.navigator = {
+    platform: 'win'
+  }
+  r = openOverride.default()
+  t.is(r, 'ctrlKey')
+
+  global.navigator.platform = 'mac'
+  r = openOverride.default()
+  t.is(r, 'metaKey')
 })
