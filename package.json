@@ -6,6 +6,19 @@
   "files": [
     "lib"
   ],
+  "license": "MIT",
+  "keywords": [
+    "nuxt",
+    "vue",
+    "router",
+    "router-ui",
+    "d3"
+  ],
+  "contributors": [
+    {
+      "name": "Richard Schloss"
+    }
+  ],
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",

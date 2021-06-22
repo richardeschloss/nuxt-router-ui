@@ -8,20 +8,15 @@ order: 0
 [![](https://gitlab.com/richardeschloss/nuxt-router-ui/badges/master/coverage.svg)](https://gitlab.com/richardeschloss/nuxt-router-ui)
 [![NPM](https://img.shields.io/npm/l/nuxt-router-ui.svg)](https://github.com/richardeschloss/nuxt-router-ui/blob/development/LICENSE)
 
-[📖 **Release Notes**](./CHANGELOG.md)
-
 # nuxt-router-ui
 
 A dope AF router UI for Nuxt and VueJS. 
-
-[Animated GIF placeholder]
 
 ## Easy-as-pie Usage
 
 1. Install it
 
 ```bash
-# install dependencies
 $ npm i -D nuxt-router-ui
 ```
 
@@ -30,8 +25,9 @@ $ npm i -D nuxt-router-ui
 `nuxt.config.js`
 ```js
 export default {
+  ...,
+  modules: ['nuxt-router-ui'],
   ...
-  modules: ['nuxt-router-ui']
 }
 
 ```

@@ -1,46 +1,22 @@
+[![npm](https://img.shields.io/npm/v/nuxt-router-ui.svg)](https://www.npmjs.com/package/nuxt-router-ui)
+[![npm](https://img.shields.io/npm/dt/nuxt-router-ui.svg)](https://www.npmjs.com/package/nuxt-router-ui)
+[![](https://gitlab.com/richardeschloss/nuxt-router-ui/badges/master/pipeline.svg)](https://gitlab.com/richardeschloss/nuxt-router-ui)
+[![](https://gitlab.com/richardeschloss/nuxt-router-ui/badges/master/coverage.svg)](https://gitlab.com/richardeschloss/nuxt-router-ui)
+[![NPM](https://img.shields.io/npm/l/nuxt-router-ui.svg)](https://github.com/richardeschloss/nuxt-router-ui/blob/development/LICENSE)
+
+[📖 **Release Notes**](./CHANGELOG.md)
+
 # nuxt-router-ui
 
-A dope AF router UI for Nuxt and VueJS. 
+A dope AF router UI for Nuxt and VueJS. Stash it in the footer and just use it when you need it! Hide it when you don't!
 
-[Animated GIF placeholder]
+## Demo
+![](https://cdn-images-1.medium.com/max/800/1*z8zQ1Tc6B3GkKsYjaFMCBA.gif)
 
-## Easy-as-pie Usage
-
-1. Install it
-
-```bash
-# install dependencies
-$ npm i -D nuxt-router-ui
-```
-
-2. Add 'nuxt-router-ui' to your modules (Nuxt):
-
-`nuxt.config.js`
-```js
-export default {
-  ...
-  modules: ['nuxt-router-ui']
-}
-
-```
-
-3. Embed it. The component to embed is `<D3RouterUI />`. Find a part of your app that is pretty much fixed, like the footer:
-
-`layouts/default.vue`
-```html
-<template>
-  <div>
-    <Nuxt />
-    <D3RouterUI />
-  </div>
-</template>
-```
-
-4. Use it.
 | Action | Result |
 | --- | --- |
-| Ctrl + Space | Opens Router UI |
-| Click (on node) | Opens the path's children, if any |
+| Ctrl + Shift + Space | Opens the Router UI |
+| Click (on node) | Opens the route's children, if any |
 | Ctrl + Click (on node) | Navigates to that route's path. If it's a parameterized route, you'll be prompted for parameters before navigation (only if parameters are required)* |
 | Ctrl + Shift + Click (on node) | Similar as Ctrl + Click, but force opens the prompt for the parameterized route, whether the parameters are required or not |
 
@@ -48,6 +24,4 @@ export default {
 
 The router UI will always start with the current route's node expanded to show it's children.
 
-## Documentation
-
-Documentation is here: [Docs](https://nuxt-router-ui.netlify.app/stories/)
+More info in the [Quick Start](https://nuxt-router-ui.netlify.app/stories/en/Quick%20Start)
