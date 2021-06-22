@@ -59,10 +59,11 @@ linkWidth: 1.5
 | imageSize | the size of the image edge, treating the image as a square | 25 (means 25 x 25 sqaure) |
 | blowupFactor | the factor by which to scale the image on mouseover | 3 (as in 3x size) |
 | startIn | an object { [prop]: value } to match a node to be active on start; i.e., { name: 'John' } means to start the tree with John and his children expanded, all others closed. (Useful for the router UI, which tries to match the current route path) | {} |
+| clickOverride | key to trigger the "nodeClick" event | 'metaKey' on Mac, 'ctrlKey' on non-mac
 
 # Events
 
-| Name | Trigger |
-| --- | --- |
-| nodeClick | Ctrl + Click any node |
+| Name | Trigger | Notes |
+| --- | --- | --- |
+| nodeClick | Mac: Cmd + click any node, non-mac: Ctrl + Click any node | Can be overridden with `clickOverride` prop |
 
