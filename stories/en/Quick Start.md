@@ -1,3 +1,15 @@
+---
+title: Quick Start
+order: 0
+---
+[![npm](https://img.shields.io/npm/v/nuxt-router-ui.svg)](https://www.npmjs.com/package/nuxt-router-ui)
+[![npm](https://img.shields.io/npm/dt/nuxt-router-ui.svg)](https://www.npmjs.com/package/nuxt-router-ui)
+[![](https://gitlab.com/richardeschloss/nuxt-router-ui/badges/master/pipeline.svg)](https://gitlab.com/richardeschloss/nuxt-router-ui)
+[![](https://gitlab.com/richardeschloss/nuxt-router-ui/badges/master/coverage.svg)](https://gitlab.com/richardeschloss/nuxt-router-ui)
+[![NPM](https://img.shields.io/npm/l/nuxt-router-ui.svg)](https://github.com/richardeschloss/nuxt-router-ui/blob/development/LICENSE)
+
+[📖 **Release Notes**](./CHANGELOG.md)
+
 # nuxt-router-ui
 
 A dope AF router UI for Nuxt and VueJS. 
@@ -47,7 +59,3 @@ export default {
 (*Note: after parameters are input and submitted, they are cached to localStorage so that you don't have to keep re-entering the parameters.)
 
 The router UI will always start with the current route's node expanded to show it's children.
-
-## Documentation
-
-Documentation is here: [Docs](https://nuxt-router-ui.netlify.app/stories/)
