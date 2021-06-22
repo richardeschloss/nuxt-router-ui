@@ -47,7 +47,7 @@ export default {
 4. Use it.
 | Action | Result |
 | --- | --- |
-| Ctrl + Space | Opens Router UI |
+| Ctrl + Shift + Space | Opens Router UI |
 | Click (on node) | Opens the path's children, if any |
 | Ctrl + Click (on node) | Navigates to that route's path. If it's a parameterized route, you'll be prompted for parameters before navigation (only if parameters are required)* |
 | Ctrl + Shift + Click (on node) | Similar as Ctrl + Click, but force opens the prompt for the parameterized route, whether the parameters are required or not |
