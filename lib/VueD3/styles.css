@@ -890,6 +890,10 @@ html {
   pointer-events: none;
 }
 
+.modal {
+  transition: top 0.3s ease-out;
+}
+
 .modal.fade .modal-dialog {
   transition: -webkit-transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
