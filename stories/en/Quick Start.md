@@ -26,7 +26,7 @@ $ npm i -D nuxt-router-ui
 ```js
 export default {
   ...,
-  modules: ['nuxt-router-ui'],
+  buildModules: ['nuxt-router-ui'],
   ...
 }
 
@@ -41,7 +41,7 @@ import BootstrapVue from 'bootstrap-vue'
 import D3RouterUI from 'nuxt-router-ui/lib/D3RouterUI.js'
 
 Vue.use(BootstrapVue) // provides the BModal component
-Vue.component('D3RouterUI', D3RouterUI)
+Vue.component('D3RouterUI', D3RouterUI) // provides the component and scoped styles
 ```
 
 ### Embed it
