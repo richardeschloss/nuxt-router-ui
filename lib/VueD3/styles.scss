@@ -1,0 +1,17 @@
+.nuxt-router-ui {
+  /* Minimal setup */
+  @import "bootstrap/scss/functions";
+  @import "bootstrap/scss/variables";
+  @import "bootstrap/scss/mixins";
+  @import "node_modules/bootstrap/scss/type";
+  
+  /* Required Components */
+  @import "bootstrap/scss/buttons";
+  @import "bootstrap/scss/close";
+  @import "bootstrap/scss/forms";
+  @import "bootstrap/scss/modal";
+  
+
+  /* Bootstrap-vue extensions */
+  @import 'bootstrap-vue/src/components/modal/index';
+}

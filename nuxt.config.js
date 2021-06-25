@@ -39,15 +39,14 @@ export default {
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
-    'nuxt-stories'
+    'nuxt-stories',
+    '~/lib/module.js'
   ],
 
   stories: { forceBuild: true, staticHost: process.env.NODE_ENV === 'production' },
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: [
-    '~/lib/module.js'
-  ],
+  modules: [],
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
