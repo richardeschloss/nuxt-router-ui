@@ -51,7 +51,8 @@ function shallowRender (h) {
 
 const stubs = {
   'b-modal': { render: shallowRender },
-  D3Tree: { render: shallowRender }
+  D3Tree: { render: shallowRender },
+  Draggable: { render: shallowRender }
 }
 
 Object.entries(stubs).forEach(([name, comp]) => {
