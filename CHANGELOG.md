@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.0.3] - 2021-06-24
+### Changed
+- Made RouterUI modal draggable
+
 ## [1.0.2] - 2021-06-24
 ### Fixed
 - Scoping of css to D3Router (under class "nuxt-router-ui")

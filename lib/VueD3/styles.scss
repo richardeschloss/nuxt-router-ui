@@ -14,4 +14,8 @@
 
   /* Bootstrap-vue extensions */
   @import 'bootstrap-vue/src/components/modal/index';
+
+  .nru-modal-content {
+    height: 85vh;
+  }
 }

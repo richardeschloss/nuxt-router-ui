@@ -1,7 +1,7 @@
 {
   "all": false,
   "reporter": ["html", "text"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "lib/VueD3/Draggable.js"],
   "include": [
     "components/**/*.js", 
     "lib/VueD3/*.js",
