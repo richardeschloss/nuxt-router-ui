@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.0.4] - 2021-06-29
+### Fixed
+- Bumped sass-loader to dependency
+
 ## [1.0.3] - 2021-06-24
 ### Changed
 - Made RouterUI modal draggable
