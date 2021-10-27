@@ -1,19 +1,15 @@
+import { writeFileSync } from 'fs'
+import Vue from 'vue'
 import test from 'ava'
 
+const script = `import Vue from 'vue'
+import Draggable from './VueD3/Draggable.js'
+Vue.component('Draggable', Draggable)
+`
+writeFileSync('./lib/components.js', script)
+
 test('Plugin', async (t) => {
-  global.require = {
-    context(dir) {
-      t.is(dir, './VueD3')
-      function r(fname) {
-        return { default: {}}
-      }
-      r.keys = () => [
-        'D3RouterUI.js',
-        'D3Tree.js'
-      ]
-      return r
-    }
-  }
-  
   await import('../lib/plugin.js')
+  t.truthy(Vue.component('Draggable'))
+  t.truthy(Vue._installedPlugins.length > 0)
 })
