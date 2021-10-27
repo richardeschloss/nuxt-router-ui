@@ -1,5 +1,8 @@
 export default {
-  ignoredByWatcher: ['!**/*.{js,vue}'],
+  ignoredByWatcher: [
+    '!**/*.{js,vue}',
+    'lib/components.js'
+  ],
   files: [
     'test/module.js',
     'test/plugin.js',
