@@ -4,30 +4,15 @@ show: false
 show2: false
 show3: false
 show4: false
+order: 3
 ---
 
 # Demo
-
-## Simple
 
 <input v-model="show" type="checkbox" > Show
 <D3Modal title="Routes" :show="show" v-on:close="() => show = false" >
   Body here.
 </D3Modal>
-
-## Draggable
-
-<input v-model="show2" type="checkbox" > Show Draggable
-<Draggable elm-selector=".modal-content">
-<D3Modal title="Routes" :show="show2" v-on:close="() => show2 = false" >
-  Body here.
-</D3Modal>
-</Draggable>
-
-## Modal from a modal
-
-* nuxt-router-ui v1 used b-modal from Bootstrap-vue and was able to pull off *dragging* the modal in a modal no problem.
-* I found it a bit challenging to recreate with the smaller code I was trying to work with, but I found conditionally choosing params modal vs. routes modal worked fine (to still allow dragging)
 
 # Design
 
@@ -41,3 +26,7 @@ show4: false
 | show | boolean | false |
 | hideFooter | boolean | false |
 | hideBackdrop | boolean | false |
+
+# Archive
+* nuxt-router-ui v1 used b-modal from Bootstrap-vue which made it easier to have clean dragging after lauching the modal in the modal. For v2, the design goal was to slim down the code needed for the modal, so now, the D3Modal will be used by D3RouterUI instead. 
+* D3RouterUI will only show the routesUI or paramsUI modal one at a time, not both at the same time. This makes the design a bit easier (especially to maintain the dragging and have it work cleanly)  
