@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2021-10-28
+### Added
+- D3Modal (replaced bModal)
+
+### Changed
+- Replaced bootstrap-vue with plain bootstrap4
+- Removed the require.context stuff. Auto import is handled different now by the module.
+
 ## [1.0.4] - 2021-06-29
 ### Fixed
 - Bumped sass-loader to dependency
