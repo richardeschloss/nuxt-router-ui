@@ -18,5 +18,4 @@ export default {
   buildModules: [
     '~/lib/module.js'
   ]
-
 }
