@@ -4,11 +4,6 @@ import ava from 'ava'
 import Vue from 'vue'
 import d3RouterUI from '../lib/VueD3/D3RouterUI.js'
 
-window.Date = global.Date = Date
-Vue.config.devtools = false
-Vue.config.productionTip = false
-Vue.config.silent = true
-
 const { serial: test, beforeEach, afterEach } = ava
 const D3RouterUI = Vue.extend(d3RouterUI)
 
@@ -50,7 +45,7 @@ function shallowRender (h) {
 }
 
 const stubs = {
-  'b-modal': { render: shallowRender },
+  D3Modal: { render: shallowRender },
   D3Tree: { render: shallowRender },
   Draggable: { render: shallowRender }
 }
@@ -59,23 +54,12 @@ Object.entries(stubs).forEach(([name, comp]) => {
   Vue.component(name, comp)
 })
 
-let modalShown, modalHidden, comp, mocks
+let comp, mocks
 let routesPushed = []
 
 beforeEach((t) => {
   routesPushed = []
-  modalShown = false
-  modalHidden = false
   mocks = {
-    $bvModal: {
-      show (id) {
-        modalShown = id
-      },
-      hide (id) {
-        modalShown = false
-        modalHidden = id
-      }
-    },
     $route: {
       name: 'app'
     },
@@ -123,13 +107,15 @@ test('Routes-ui Modal', (t) => {
   comp.$mount()
   t.truthy(wAddedCbs.keydown)
   wAddedCbs.keydown({})
-  t.false(modalShown)
+  t.false(comp.showParamsModal)
+  t.false(comp.showRoutesModal)
   wAddedCbs.keydown({
     ctrlKey: true,
     shiftKey: true,
     key: ' '
   })
-  t.is(modalShown, 'routes-ui')
+  t.false(comp.showParamsModal)
+  t.true(comp.showRoutesModal)
   comp.$destroy()
   t.truthy(wRemovedCbs.keydown)
 
@@ -147,7 +133,8 @@ test('Handle Click (path with params)', (t) => {
   t.is(comp.nextPath, routePath)
   t.true(comp.reqdParams.id !== undefined)
   t.true(comp.reqdParams.name !== undefined)
-  t.is(modalShown, 'params-required')
+  t.true(comp.showParamsModal)
+  t.false(comp.showRoutesModal)
 })
 
 test('Handle Click (path with params, partially cached)', (t) => {
@@ -159,7 +146,8 @@ test('Handle Click (path with params, partially cached)', (t) => {
   comp.handleClick({ evt, data })
   t.false(comp.reqdParams.id !== undefined)
   t.true(comp.reqdParams.name !== undefined)
-  t.is(modalShown, 'params-required')
+  t.true(comp.showParamsModal)
+  t.false(comp.showRoutesModal)
 })
 
 test('Handle Click (path with params, all cached)', (t) => {
@@ -170,7 +158,8 @@ test('Handle Click (path with params, all cached)', (t) => {
   const data = { path: routePath, pathTemplate }
   comp.handleClick({ evt, data })
   t.is(routesPushed[0], routePath)
-  t.false(modalShown)
+  t.false(comp.showParamsModal)
+  t.false(comp.showRoutesModal)
 })
 
 test('Handle click (force prompt)', (t) => {
@@ -179,7 +168,8 @@ test('Handle click (force prompt)', (t) => {
   const evt = { shiftKey: true }
   const data = { path: routePath, pathTemplate }
   comp.handleClick({ evt, data })
-  t.is(modalShown, 'params-required')
+  t.true(comp.showParamsModal)
+  t.false(comp.showRoutesModal)
 })
 
 test('Handle Click (force prompt, params not required)', (t) => {
@@ -192,7 +182,8 @@ test('Handle Click (force prompt, params not required)', (t) => {
       pathTemplate: '/path/no/params'
     }
   }))
-  t.false(modalShown)
+  t.false(comp.showParamsModal)
+  t.false(comp.showRoutesModal)
 })
 
 test('Param Modal (input events)', async (t) => {
@@ -200,8 +191,11 @@ test('Param Modal (input events)', async (t) => {
   const keyup = new Event('keyup')
 
   const comp = new D3RouterUI({
+    data: {
+      showParamsModal: true
+    },
     components: {
-      'b-modal': { render: fullRender },
+      D3Modal: { render: fullRender },
       D3Tree: { render: shallowRender }
     }
   })
@@ -218,11 +212,13 @@ test('Param Modal (input events)', async (t) => {
   t.is(comp.reqdParams.id, 'abc123456')
 
   inputElm.dispatchEvent(keyup)
-  t.false(modalHidden)
+  t.true(comp.showParamsModal)
+  t.false(comp.showRoutesModal)
 
   keyup.key = 'Enter'
   inputElm.dispatchEvent(keyup)
-  t.is(modalHidden, 'params-required')
+  t.false(comp.showParamsModal)
+  t.true(comp.showRoutesModal)
 })
 
 test('Handle Ok (Params modal)', (t) => {
@@ -272,4 +268,18 @@ test('Open Override', (t) => {
   global.navigator.platform = 'mac'
   r = openOverride.default()
   t.is(r, 'metaKey')
+})
+
+test('Close modals', (t) => {
+  comp.showParamsModal = true
+  comp.showRoutesModal = false
+  comp.closeParams()
+  t.false(comp.showParamsModal)
+  t.true(comp.showRoutesModal)
+
+  comp.showParamsModal = false
+  comp.showRoutesModal = true
+  comp.closeRoutes()
+  t.false(comp.showParamsModal)
+  t.false(comp.showRoutesModal)
 })

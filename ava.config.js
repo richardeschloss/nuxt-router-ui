@@ -7,6 +7,7 @@ export default {
     'test/module.js',
     'test/plugin.js',
     'test/D3Tree.js',
+    'test/D3Modal.js',
     'test/D3RouterUI.js'
   ],
   nodeArguments: [
