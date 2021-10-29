@@ -57,6 +57,7 @@
     "prettier": "^2.3.0"
   },
   "imports": {
+    "#app": "./test/mocks/app.js",
     "#root/*": "./*"
   }
 }
