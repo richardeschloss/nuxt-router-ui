@@ -1,15 +1,13 @@
-import { writeFileSync } from 'fs'
+import { readdirSync } from 'fs'
 import Vue from 'vue'
 import test from 'ava'
+import '../lib/plugin.js'
 
-const script = `import Vue from 'vue'
-import Draggable from './VueD3/Draggable.js'
-Vue.component('Draggable', Draggable)
-`
-writeFileSync('./lib/components.js', script)
-
-test('Plugin', async (t) => {
-  await import('../lib/plugin.js')
-  t.truthy(Vue.component('Draggable'))
-  t.truthy(Vue._installedPlugins.length > 0)
+test('Plugin', (t) => {
+  const components = readdirSync('./lib/VueD3')
+    .filter(f => f.endsWith('.js'))
+    .map(f => f.replace(/^.+\//, '').replace(/\.\w+$/, ''))
+  components.forEach((name) => {
+    t.truthy(Vue.component(name))
+  })
 })
