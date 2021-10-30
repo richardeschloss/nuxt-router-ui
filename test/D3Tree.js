@@ -1,8 +1,13 @@
 import 'jsdom-global/register.js'
-import { promisify } from 'util'
+import BrowserEnv from 'browser-env'
 import ava from 'ava'
-import Vue from 'vue'
-import d3Tree from '../lib/VueD3/D3Tree.js'
+import { createApp, nextTick } from 'vue'
+import D3Tree from '../lib/VueD3/D3Tree.js'
+BrowserEnv()
+
+const root = document.createElement('div')
+root.id = 'app'
+document.body.appendChild(root)
 
 global.ResizeObserver = function (cb) {
   _resizeObservers.push(cb)
@@ -13,18 +18,10 @@ global.ResizeObserver = function (cb) {
   }
 }
 
-window.Date = global.Date = Date
-
-Vue.config.devtools = false
-Vue.config.productionTip = false
-Vue.config.silent = true
-
-const { serial: test, beforeEach, afterEach } = ava
-const D3Tree = Vue.extend(d3Tree)
+const { serial: test, beforeEach } = ava
 
 let _resizeObservers = []
 let _observedElms = []
-let comp
 const nodes = {
   name: 'rootNode',
   children: [{
@@ -38,24 +35,13 @@ const nodes = {
 beforeEach(() => {
   _resizeObservers = []
   _observedElms = []
-  comp = new D3Tree({
-    propsData: {
-      data: nodes
-    }
-  })
-  comp.$nextTickP = promisify(comp.$nextTick)
 })
 
-afterEach(() => {
-  comp.$destroy()
-})
-
-test('Mount (width auto)', (t) => {
+test('Mount (width auto)', async (t) => {
   window.getComputedStyle = () => {
     return { width: 'auto' }
   }
-  const comp = new D3Tree().$mount()
-  comp.$mount()
+  const comp = await createApp(D3Tree).mount('#app')
   t.is(comp.svg, null)
 })
 
@@ -63,31 +49,27 @@ test('Mount (various prop inputs)', async (t) => {
   window.getComputedStyle = () => {
     return { width: '500px' }
   }
-  comp.$mount()
-  await comp.$nextTickP()
-
-  const Wrapper = Vue.extend({
-    components: {
-      D3Tree: d3Tree
-    },
-    render (h) {
-      return h('D3Tree', {
-        attrs: {
-          id: 'abc123',
-          data: nodes,
-          orientation: 90,
-          startIn: {
-            name: 'child1'
-          }
-        },
-        ref: 'myTree'
-      })
-    }
+  const containers = ['app1', 'app2']
+  containers.forEach((c) => {
+    const elm = document.createElement('div')
+    elm.id = c
+    document.body.appendChild(elm)
   })
-  const c = new Wrapper({}).$mount()
-  const comp2 = c.$refs.myTree
-  comp2.$nextTickP = promisify(comp2.$nextTick)
-  await comp2.$nextTickP()
+
+  const comp = await createApp(D3Tree, {
+    data: nodes
+  }).mount('#app1')
+
+  const comp2 = await createApp(D3Tree, {
+    ref: 'myTree',
+    id: 'abc123',
+    data: nodes,
+    orientation: 90,
+    startIn: {
+      name: 'child1'
+    }
+  }).mount('#app2')
+  await nextTick()
 
   t.truthy(comp.svg)
   t.truthy(comp2.svg)
@@ -96,8 +78,8 @@ test('Mount (various prop inputs)', async (t) => {
   t.not(comp.svg.innerHTML, comp2.svg.innerHTML)
 })
 
-test('Chart container (directives)', (t) => {
-  const { directives } = d3Tree
+test('Chart container (listeners)', (t) => {
+  const { registerListeners } = D3Tree.methods
   let callCnt = 0
   const children = []
   const _watchers = {}
@@ -111,14 +93,16 @@ test('Chart container (directives)', (t) => {
     }
   }
   const context = {
+    $el: el,
     buildTree () {
       callCnt++
     },
     $watch (label, cb) {
       _watchers[label] = cb
-    }
+    },
+    registerListeners
   }
-  directives.chartContainer.inserted(el, null, { context })
+  context.registerListeners()
   t.true(_resizeObservers.length > 0)
   t.true(_observedElms.length > 0)
   t.truthy(_watchers.svg)
@@ -149,7 +133,7 @@ test('Handle Click and Ctrl+Click (on node)', (t) => {
   d._children = [...d.data.children]
   const update = () => callCnt++
   const _emitted = {}
-  const ctx = d3Tree.methods
+  const ctx = D3Tree.methods
   ctx.$emit = (label, msg) => {
     _emitted[label] = msg
   }
@@ -170,7 +154,7 @@ test('Handle Click and Ctrl+Click (on node)', (t) => {
 })
 
 test('NodeClick Override', (t) => {
-  const { clickOverride } = d3Tree.props
+  const { clickOverride } = D3Tree.props
   process.server = true
   let r = clickOverride.default()
   t.falsy(r)
