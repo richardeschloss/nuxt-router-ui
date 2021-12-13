@@ -1,46 +1,7 @@
 import { URL, pathToFileURL } from 'url'
-import * as compiler from 'vue-template-compiler'
-import { parse, compileTemplate, compileStyle } from '@vue/component-compiler-utils'
 
 const baseURL = pathToFileURL(`${process.cwd()}/`).href
-
-/**
- * @param {any} source
- * @param {string} url
- */
-function transformVue (source, url) {
-  const filename = '/' + url.split(baseURL)[1]
-  const parsed = parse({
-    source,
-    // @ts-ignore
-    compiler,
-    filename,
-    needMap: true
-  })
-  
-  const compiledTemplate = compileTemplate({
-    filename,
-    source: parsed.template.content,
-    // @ts-ignore
-    compiler
-  })
-  console.log('compiled template', compiledTemplate.code)
-
-  const compiledStyle = compileStyle({
-    filename,
-    source: parsed.styles[0].content,
-    // @ts-ignore
-    compiler,
-    scoped: true
-  })
-  console.log('compiled style', compiledStyle)
-
-  return compiledTemplate.code +
-    (parsed.script
-      ? parsed.script.content
-        .replace('export default {\n', 'export default {\n  render,\n  staticRenderFns,\n')
-      : 'export default {\n  render,\n  staticRenderFns\n, _compiled: true\n }')
-}
+const regex = /(\.ts|\.s*css)$/
 
 /**
  * @param {string} specifier
@@ -49,7 +10,7 @@ function transformVue (source, url) {
  */
 export function resolve (specifier, context, defaultResolve) {
   const { parentURL = baseURL } = context
-  if (specifier.endsWith('.vue')) {
+  if (regex.test(specifier)) {
     return {
       url: new URL(specifier, parentURL).href
     }
@@ -66,7 +27,7 @@ export function resolve (specifier, context, defaultResolve) {
  */
 export function getFormat (url, context, defaultGetFormat) {
   // This loader assumes all network-provided JavaScript is ES module code.
-  if (url.endsWith('.vue')) {
+  if (regex.test(url)) {
     return {
       format: 'module'
     }
@@ -83,9 +44,17 @@ export function getFormat (url, context, defaultGetFormat) {
  */
 export function transformSource (source, context, defaultGetSource) {
   const { url } = context
-  if (url.endsWith('.vue')) {
+  if (url.endsWith('vue.runtime.esm.js')) {
     return {
-      source: transformVue(source.toString(), url)
+      source: source.toString()
+    }
+  } else if (url.endsWith('.ts')) {
+    return {
+      source: source.toString()
+    }
+  } else if (url.match(/\.s*css$/)) {
+    return {
+      source: 'export default {}'
     }
   }
 

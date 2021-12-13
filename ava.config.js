@@ -12,8 +12,9 @@ export default {
   ],
   nodeArguments: [
     '--no-warnings',
-    '--experimental-loader=./cssLoader.js'
+    '--experimental-loader=./test/utils/loaders.oldStable.js'
   ],
+  serial: true,
   tap: false,
   verbose: true,
   color: true
