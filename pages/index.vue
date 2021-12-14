@@ -27,7 +27,40 @@
 
     The router UI will always start with the current route's node expanded to show it's children.
 
-    More info in the [Quick Start](https://nuxt-router-ui.netlify.app/stories/en/Quick%20Start)
+    ### Install it
+
+    ```bash
+    $ npm i -D nuxt-router-ui
+    ```
+
+    ### Nuxt Config (one-line)
+
+    `nuxt.config.js`
+    ```js
+    export default {
+    ...,
+    buildModules: ['nuxt-router-ui'],
+    ...
+    }
+
+    ```
+
+    ### Vue only config
+
+    `your-globals.js`
+    ```js
+    import Vue from 'vue'
+    import BootstrapVue from 'bootstrap-vue'
+    import D3RouterUI from 'nuxt-router-ui/lib/D3RouterUI.js'
+
+    Vue.use(BootstrapVue) // provides the BModal component
+    Vue.component('D3RouterUI', D3RouterUI) // provides the component and scoped styles
+    ```
+
+    ### Embed it
+
+    The component to embed is D3RouterUI. Find a part of your app that is pretty much fixed, like the footer and stick it there.
+    ```
   </Markdown>
 </template>
 

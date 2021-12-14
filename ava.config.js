@@ -12,9 +12,8 @@ export default {
   ],
   nodeArguments: [
     '--no-warnings',
-    '--experimental-loader=./test/utils/loaders.oldStable.js'
+    '--experimental-loader=./test/utils/loaders.js'
   ],
-  serial: true,
   tap: false,
   verbose: true,
   color: true
