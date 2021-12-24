@@ -1,0 +1,8 @@
+.nuxt-router-ui-demo {
+  @import "highlight.js/styles/base16/darcula";
+
+  .hljs {
+    font-family: Consolas, Monaco, monospace !important;
+    color: #d0d0d0;
+  }
+}
