@@ -1,27 +1,14 @@
 import 'jsdom-global/register.js'
-import BrowserEnv from 'browser-env'
-import { createApp, h } from 'vue'
+import Vue from 'vue'
 import test from 'ava'
 import D3Modal from '../lib/VueD3/D3Modal.js'
-BrowserEnv()
-
-const root = document.createElement('div')
-root.id = 'app'
-document.body.appendChild(root)
 
 global.window.focus = () => {}
 
 function launchModal (propsData) {
-  const App = createApp({
-    render () {
-      return h(D3Modal, propsData, { // D3Modal has a slot...expects to be a wrapper...
-        default () {
-          return []
-        }
-      })
-    }
-  })
-  const comp = App.mount('#app')
+  const Comp = Vue.extend(D3Modal)
+  const comp = new Comp({ propsData })
+  comp.$mount()
   const modal = comp.$el.querySelector('.modal')
   return { comp, modal }
 }
@@ -34,6 +21,14 @@ test('D3Modal: defaults', (t) => {
 })
 
 test('D3Modal: show modal, trigger events', (t) => {
+  const { comp, modal } = launchModal({
+    show: true
+  })
+  const backdrop = comp.$el.querySelector('.modal-backdrop')
+  const okBtn = modal.querySelector('.ok')
+  const closeBtn = modal.querySelector('.close')
+  t.truthy(modal)
+  t.truthy(backdrop)
   return new Promise((resolve) => {
     let doneCnt = 0
     function handleDone () {
@@ -42,17 +37,8 @@ test('D3Modal: show modal, trigger events', (t) => {
         resolve()
       }
     }
-
-    const { comp, modal } = launchModal({
-      show: true,
-      onOk: handleDone,
-      onClose: handleDone
-    })
-    const backdrop = comp.$el.querySelector('.modal-backdrop')
-    const okBtn = modal.querySelector('.ok')
-    const closeBtn = modal.querySelector('.close')
-    t.truthy(modal)
-    t.truthy(backdrop)
+    comp.$on('ok', handleDone)
+    comp.$on('close', handleDone)
     okBtn.click()
     closeBtn.click()
   })
