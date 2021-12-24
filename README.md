@@ -47,10 +47,8 @@ export default {
 `your-globals.js` 
 ```js
 import Vue from 'vue'
-import BootstrapVue from 'bootstrap-vue'
-import D3RouterUI from 'nuxt-router-ui/lib/D3RouterUI.js'
+import D3RouterUI from 'nuxt-router-ui/lib/VueD3/D3RouterUI.js'
 
-Vue.use(BootstrapVue) // provides the BModal component
 Vue.component('D3RouterUI', D3RouterUI) // provides the component and scoped styles
 ```
 
