@@ -1,4 +1,9 @@
-export default {
+import { defineNuxtConfig } from '@nuxt/bridge'
+
+export default defineNuxtConfig({
+  bridge: {
+    vite: true
+  },
   telemetry: false,
   target: process.env.NODE_ENV === 'production'
     ? 'static'
@@ -18,4 +23,4 @@ export default {
   buildModules: [
     '~/lib/module.js'
   ]
-}
+})
