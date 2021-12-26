@@ -26,7 +26,7 @@
     "generate": "nuxt generate && mkdir -p dist/markdown && cp -rf stories/* dist/markdown",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "test": "ava --watch",
-    "test:cov": "c8 ava | tap-xunit > junit.xml"
+    "test:cov": "c8 ava"
   },
   "dependencies": {
     "bootstrap": "^5.1.3",
@@ -49,8 +49,7 @@
     "highlight.js": "^11.3.1",
     "jsdom-global": "^3.0.2",
     "marked": "^4.0.8",
-    "nuxt-edge": "^2.16.0-27338416.777a4b7f",
-    "tap-xunit": "^2.4.1"
+    "nuxt-edge": "^2.16.0-27338416.777a4b7f"
   },
   "imports": {
     "#app": "./test/mocks/app.js",
