@@ -90,3 +90,4 @@ sw.*
 *.swp
 .archive
 lib/components.js
+junit.xml

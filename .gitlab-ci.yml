@@ -17,3 +17,5 @@ test_unit:
   artifacts:
     paths:
       - coverage
+    reports:
+      - junit.xml
