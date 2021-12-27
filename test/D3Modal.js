@@ -13,6 +13,12 @@ function launchModal (propsData) {
   return { comp, modal }
 }
 
+function waitForEvt (comp, evt) {
+  return new Promise((resolve) => {
+    comp.$on(evt, resolve)
+  })
+}
+
 test('D3Modal: defaults', (t) => {
   const title = 'Some Modal'
   const { modal } = launchModal({ title })
@@ -20,28 +26,22 @@ test('D3Modal: defaults', (t) => {
   t.is(modalTitle.textContent, title)
 })
 
-test('D3Modal: show modal, trigger events', (t) => {
+test('D3Modal: show modal, trigger events', async (t) => {
   const { comp, modal } = launchModal({
     show: true
   })
   const backdrop = comp.$el.querySelector('.modal-backdrop')
   const okBtn = modal.querySelector('.ok')
-  const closeBtn = modal.querySelector('.close')
+  const closeBtn = modal.querySelector('.btn-close')
   t.truthy(modal)
   t.truthy(backdrop)
-  return new Promise((resolve) => {
-    let doneCnt = 0
-    function handleDone () {
-      doneCnt++
-      if (doneCnt === 2) {
-        resolve()
-      }
-    }
-    comp.$on('ok', handleDone)
-    comp.$on('close', handleDone)
-    okBtn.click()
-    closeBtn.click()
-  })
+  const p = [
+    waitForEvt(comp, 'ok'),
+    waitForEvt(comp, 'close')
+  ]
+  okBtn.click()
+  closeBtn.click()
+  await Promise.all(p)
 })
 
 test('D3Modal: show modal, hide footer and backdrop', (t) => {
