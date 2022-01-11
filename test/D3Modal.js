@@ -50,7 +50,7 @@ test('D3Modal: show modal, trigger events', (t) => {
     })
     const backdrop = comp.$el.querySelector('.modal-backdrop')
     const okBtn = modal.querySelector('.ok')
-    const closeBtn = modal.querySelector('.close')
+    const closeBtn = modal.querySelector('.btn-close')
     t.truthy(modal)
     t.truthy(backdrop)
     okBtn.click()
