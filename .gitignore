@@ -90,3 +90,4 @@ sw.*
 *.swp
 .archive
 lib/components.js
+lib/VueD3/styles.min.css.map
