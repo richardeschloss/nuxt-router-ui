@@ -8,7 +8,7 @@
 
 # nuxt-router-ui
 
-A dope AF router UI for Nuxt and VueJS. Stash it in the footer and just use it when you need it! Hide it when you don't!
+A router UI for Nuxt and VueJS. Stash it in the footer and just use it when you need it! Hide it when you don't!
 
 ## Demo
 ![](https://cdn-images-1.medium.com/max/800/1*z8zQ1Tc6B3GkKsYjaFMCBA.gif)
@@ -26,9 +26,16 @@ The router UI will always start with the current route's node expanded to show i
 
 ### Install it
 
+* Nuxt2.x
 ```bash
 $ npm i -D nuxt-router-ui
 ```
+
+* Nuxt3.x
+```bash
+$ npm i -D nuxt-router-ui@next
+```
+
 
 ### Nuxt Config (one-line)
 
