@@ -9,6 +9,7 @@ const root = document.createElement('div')
 root.id = 'app'
 document.body.appendChild(root)
 
+global.window.outerHeight = 700
 global.window.focus = () => {}
 
 function launchModal (propsData) {
