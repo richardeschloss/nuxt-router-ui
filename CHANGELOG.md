@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [3.0.5] - 2022-11-24
+### Added
+- Updates as needed to support Nuxt3 stable release
+
 ## [2.0.1] - 2021-10-28
 ### Added
 - D3Modal (replaced bModal)

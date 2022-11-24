@@ -1,13 +1,22 @@
-import { readdirSync } from 'fs'
-import Vue from 'vue'
 import test from 'ava'
-import '../lib/plugin.js'
+import { setup } from '#app'
 
-test('Plugin', (t) => {
-  const components = readdirSync('./lib/VueD3')
-    .filter(f => f.endsWith('.js'))
-    .map(f => f.replace(/^.+\//, '').replace(/\.\w+$/, ''))
-  components.forEach((name) => {
-    t.truthy(Vue.component(name))
+test('Plugin', async (t) => {
+  const nuxt = {
+    vueApp: {
+      components: [],
+      component (name, obj) {
+        nuxt.vueApp.components.push({ name, obj })
+      }
+    }
+  }
+  setup(nuxt)
+  await import('../lib/plugin.js')
+
+  const expComponents = [
+    'D3RouterUI'
+  ]
+  expComponents.forEach((c, idx) => {
+    t.is(nuxt.vueApp.components[idx].name, c)
   })
 })

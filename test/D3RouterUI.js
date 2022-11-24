@@ -1,26 +1,31 @@
 import 'jsdom-global/register.js'
-import { promisify } from 'util'
+import BrowserEnv from 'browser-env'
 import ava from 'ava'
-import Vue from 'vue'
-import d3RouterUI from '../lib/VueD3/D3RouterUI.js'
+import { createApp, nextTick } from 'vue'
+import D3RouterUI from '../lib/VueD3/D3RouterUI.js'
+import './mocks/localStorage.js'
+BrowserEnv({ url: 'http://localhost' })
+global.ResizeObserver = function (cb) {
+  return {
+    observe (elm) {
+    }
+  }
+}
+
+const root = document.createElement('div')
+root.id = 'app'
+document.body.appendChild(root)
 
 const { serial: test, beforeEach, afterEach } = ava
-const D3RouterUI = Vue.extend(d3RouterUI)
 
 const store = {
   $cachedParams: {}
 }
 
-const gMocks = {
-  localStorage: {
-    getItem (label) {
-      return JSON.stringify(store[label])
-    },
-    setItem (label, value) {
-      store[label] = JSON.parse(value)
-    }
-  }
+function updateCache () {
+  localStorage.setItem('$cachedParams', JSON.stringify(store.$cachedParams))
 }
+
 const wAddedCbs = {}
 const wRemovedCbs = {}
 
@@ -33,35 +38,17 @@ const wMocks = {
   }
 }
 
-Object.assign(global, gMocks)
 Object.assign(window, wMocks)
 
-function fullRender (h) {
-  return h('div', this.$attrs, this.$slots.default)
-}
-
-function shallowRender (h) {
-  return h('div')
-}
-
-const stubs = {
-  D3Modal: { render: shallowRender },
-  D3Tree: { render: shallowRender },
-  Draggable: { render: shallowRender }
-}
-
-Object.entries(stubs).forEach(([name, comp]) => {
-  Vue.component(name, comp)
-})
-
+let App
 let comp, mocks
 let routesPushed = []
 
-beforeEach((t) => {
+beforeEach(async (t) => {
   routesPushed = []
   mocks = {
     $route: {
-      name: 'app'
+      name: 'app123'
     },
     $router: {
       options: {
@@ -85,16 +72,21 @@ beforeEach((t) => {
       }
     }
   }
-  comp = new D3RouterUI({})
-  Object.assign(comp, mocks)
+  App = createApp(D3RouterUI)
+    .mixin({
+      beforeCreate () {
+        Object.assign(this, mocks)
+      }
+    })
+  comp = await App.mount('#app')
 })
 
 afterEach(() => {
-  comp.$destroy()
+  App.unmount()
 })
 
 test('Get Cached Params (not stored)', (t) => {
-  const { getCachedParams } = d3RouterUI.methods
+  const { getCachedParams } = D3RouterUI.methods
   const ctx = {
     cacheKey: '',
     getCachedParams
@@ -104,7 +96,6 @@ test('Get Cached Params (not stored)', (t) => {
 })
 
 test('Routes-ui Modal', (t) => {
-  comp.$mount()
   t.truthy(wAddedCbs.keydown)
   wAddedCbs.keydown({})
   t.false(comp.showParamsModal)
@@ -116,10 +107,11 @@ test('Routes-ui Modal', (t) => {
   })
   t.false(comp.showParamsModal)
   t.true(comp.showRoutesModal)
-  comp.$destroy()
+  App.unmount()
   t.truthy(wRemovedCbs.keydown)
 
   store.$cachedParams.L0 = 'en'
+  updateCache()
   const routes = comp.getRoutes()
   t.is(routes.children[0].children[0].path, '/stories/en')
 })
@@ -139,6 +131,7 @@ test('Handle Click (path with params)', (t) => {
 
 test('Handle Click (path with params, partially cached)', (t) => {
   store.$cachedParams.id = 111
+  updateCache()
   const routePath = '/some/:id/:name'
   const pathTemplate = '/some/:id/:name'
   const evt = { shiftKey: false }
@@ -150,13 +143,16 @@ test('Handle Click (path with params, partially cached)', (t) => {
   t.false(comp.showRoutesModal)
 })
 
-test('Handle Click (path with params, all cached)', (t) => {
+test('Handle Click (path with params, all cached)', async (t) => {
+  store.$cachedParams.id = 111
   store.$cachedParams.name = 'name1'
+  updateCache()
   const routePath = '/some/:id/:name'
   const pathTemplate = '/some/:id/:name'
   const evt = { shiftKey: false }
   const data = { path: routePath, pathTemplate }
   comp.handleClick({ evt, data })
+  await nextTick()
   t.is(routesPushed[0], routePath)
   t.false(comp.showParamsModal)
   t.false(comp.showRoutesModal)
@@ -187,28 +183,19 @@ test('Handle Click (force prompt, params not required)', (t) => {
 })
 
 test('Param Modal (input events)', async (t) => {
+  store.$cachedParams = {}
+  updateCache()
+  comp.reqdParams = { id: 'abc123' }
+  comp.showParamsModal = true
+  await nextTick()
   const input = new Event('input')
   const keyup = new Event('keyup')
-
-  const comp = new D3RouterUI({
-    data: {
-      showParamsModal: true
-    },
-    components: {
-      D3Modal: { render: fullRender },
-      D3Tree: { render: shallowRender }
-    }
-  })
-  Object.assign(comp, mocks)
-  comp.$nextTickP = promisify(comp.$nextTick)
-  comp.$mount()
-
-  comp.reqdParams = { id: 'abc123' }
-  await comp.$nextTickP()
-  const inputElm = comp.$el.getElementsByTagName('input')[0]
+  const inputElm = comp.$el.querySelector('input')
   inputElm.dispatchEvent(input)
+  await nextTick()
   input.target.value = 'abc123456'
   inputElm.dispatchEvent(input)
+  await nextTick()
   t.is(comp.reqdParams.id, 'abc123456')
 
   inputElm.dispatchEvent(keyup)
@@ -224,7 +211,6 @@ test('Param Modal (input events)', async (t) => {
 test('Handle Ok (Params modal)', (t) => {
   comp.nextPath = '/some/:id/:name'
   comp.reqdParams = { id: 123, name: 'SomeName' }
-  comp.$mount()
   comp.handleOk()
   t.is(comp.nextPath, '/some/123/SomeName')
   t.is(routesPushed[0], comp.nextPath)
@@ -235,7 +221,7 @@ test('Handle Ok (Params modal)', (t) => {
 })
 
 test('NodeClick Override', (t) => {
-  const { clickOverride } = d3RouterUI.props
+  const { clickOverride } = D3RouterUI.props
   process.server = true
   let r = clickOverride.default()
   t.falsy(r)
@@ -253,7 +239,7 @@ test('NodeClick Override', (t) => {
 })
 
 test('Open Override', (t) => {
-  const { openOverride } = d3RouterUI.props
+  const { openOverride } = D3RouterUI.props
   process.server = true
   let r = openOverride.default()
   t.falsy(r)
