@@ -39,6 +39,7 @@ export function resolve (specifier, context, defaultResolve) {
   const { parentURL = baseURL } = context
   if (regex.test(specifier)) {
     return {
+      shortCircuit: true,
       url: new URL(specifier, parentURL).href
     }
   }
@@ -68,6 +69,7 @@ export async function load (url, context, defaultLoad) {
     }
   } else if (url.match(/\.s*css$/)) {
     return {
+      shortCircuit: true,
       format: 'module',
       source: 'export default {}'
     }

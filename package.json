@@ -1,6 +1,6 @@
 {
   "name": "nuxt-router-ui",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "type": "module",
   "main": "lib/module.js",
   "files": [
@@ -50,7 +50,7 @@
     "jsdom": "^18.0.0",
     "jsdom-global": "^3.0.2",
     "marked": "^4.0.7",
-    "nuxt3": "^3.0.0-27376999.6abf75d",
+    "nuxt": "^3.0.0",
     "prettier": "^2.3.0"
   },
   "imports": {

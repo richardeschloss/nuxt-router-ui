@@ -1,4 +1,7 @@
-export default {
+import { readFileSync } from 'fs'
+import { eventHandler } from 'h3'
+
+export default defineNuxtConfig({
   telemetry: false,
   target: process.env.NODE_ENV === 'production'
     ? 'static'
@@ -12,8 +15,13 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
-
-  buildModules: [
+  modules: [
     '~/lib/module.js'
-  ]
-}
+  ],
+  devServerHandlers: [{
+    route: '/README.md',
+    handler: eventHandler(() => {
+      return readFileSync('./README.md', { encoding: 'utf-8' })
+    })
+  }]
+})

@@ -3,7 +3,7 @@
     <div>Page 2 here...</div>
     <div>
       Nuxt child here:
-      <NuxtChild />
+      <NuxtPage />
     </div>
   </div>
 </template>
